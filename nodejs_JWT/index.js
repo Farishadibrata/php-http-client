@@ -24,7 +24,7 @@ app.post('/login', (req, res) => {
 app.post('/checkJWT', (req, res) => {
   if (req.headers['token']) {
     jwt.verify(req.headers['token'], privateKey, (err, decoded) => {
-      if (err) res.status(503).json({ error: 'Invalid Token' })
+      if (err) res.status(503).json()
       else if (decoded) {
         res.status(200).json({ status: 'Success' })
       }

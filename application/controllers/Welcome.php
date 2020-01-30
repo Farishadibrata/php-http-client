@@ -52,12 +52,16 @@ class Welcome extends CI_Controller
 		));
 		$response = curl_exec($curl);
 		$err = curl_error($curl);
-		curl_close($curl);
-		if ($err) {
+		if ($err) {	
 			echo "cURL Error #:" . $err;
 		} else {
-			return true;
+			if(strlen($response) <1){
+				return false;
+			} else {
+				return true;
+			}
 		}
+		curl_close($curl);
 	}
 	function checkHasToken()
 	{
@@ -84,6 +88,7 @@ class Welcome extends CI_Controller
 	public function protected_function()
 	{
 		if ($this->checkHasToken()) {
+			// var_dump($this->checkTokenValidity());
 			if($this->checkTokenValidity()){
 				echo 'Selesai';
 			}
