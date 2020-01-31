@@ -3,7 +3,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Welcome extends CI_Controller
 {
+	function __construct()
+	{
+		parent::__construct();
 
+		$excluded = ['unprotected'];
+		$method = $this->router->fetch_method();
+		if(!in_array($method, $excluded)){
+			if(!$this->checkHasToken()){
+				echo 'error no token';
+				die();
+			}
+		}
+	}
 	function http_login($username, $password)
 	{
 
@@ -52,10 +64,10 @@ class Welcome extends CI_Controller
 		));
 		$response = curl_exec($curl);
 		$err = curl_error($curl);
-		if ($err) {	
+		if ($err) {
 			echo "cURL Error #:" . $err;
 		} else {
-			if(strlen($response) <1){
+			if (strlen($response) < 1) {
 				return false;
 			} else {
 				return true;
@@ -87,11 +99,12 @@ class Welcome extends CI_Controller
 	}
 	public function protected_function()
 	{
-		if ($this->checkHasToken()) {
-			// var_dump($this->checkTokenValidity());
-			if($this->checkTokenValidity()){
-				echo 'Selesai';
-			}
-		}
+		echo 'Protected : You have token';
+	}
+	public function another_protected(){
+		echo 'Another : You have token';
+	}
+	public function unprotected(){
+		echo 'Success';
 	}
 }
